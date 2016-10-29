@@ -1,0 +1,5 @@
+fire -> grass
+fighting -> ice rock
+psychic -> poison dark
+water -> normal
+fire -> rock

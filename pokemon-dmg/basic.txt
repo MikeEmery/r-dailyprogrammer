@@ -1,0 +1,3 @@
+normal -> fire
+fire -> normal
+normal -> fire normal
