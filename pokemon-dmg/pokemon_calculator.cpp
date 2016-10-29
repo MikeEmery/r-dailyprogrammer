@@ -32,6 +32,27 @@ enum DamageType {
 
 typedef pair<DamageType, DamageType> DamagePair;
 
+const map<string, DamageType> NAME_DMG_MAP = {
+  {"normal", DamageType::NORMAL},
+  {"fire", DamageType::FIRE},
+  {"water", DamageType::WATER},
+  {"electric", DamageType::ELECTRIC},
+  {"grass", DamageType::GRASS},
+  {"ice", DamageType::ICE},
+  {"fighting", DamageType::FIGHTING},
+  {"poison", DamageType::POISON},
+  {"ground", DamageType::GROUND},
+  {"flying", DamageType::FLYING},
+  {"psychic", DamageType::PSYCHIC},
+  {"bug", DamageType::BUG},
+  {"rock", DamageType::ROCK},
+  {"ghost", DamageType::GHOST},
+  {"dragon", DamageType::DRAGON},
+  {"dark", DamageType::DARK},
+  {"steel", DamageType::STEEL},
+  {"fairy", DamageType::FAIRY}
+};
+
 const map<DamagePair, float> DMG_PAIR_MAP = {
   {DamagePair(DamageType::NORMAL, DamageType::ROCK), 0.5},
   {DamagePair(DamageType::NORMAL, DamageType::GHOST), 0.0},
@@ -44,17 +65,16 @@ const map<DamagePair, float> DMG_PAIR_MAP = {
   {DamagePair(DamageType::FIRE, DamageType::BUG), 2.0},
   {DamagePair(DamageType::FIRE, DamageType::ROCK), 0.5},
   {DamagePair(DamageType::FIRE, DamageType::DRAGON), 0.5},
-  {DamagePair(DamageType::FIRE, DamageType::STEEL), 0.5}
+  {DamagePair(DamageType::FIRE, DamageType::STEEL), 0.5},
+
+  // too lazy to copy everything, complete list is here http://pokemondb.net/type
 };
 
-DamageType parseSource(string& arg) {
+DamageType parseSource(const string& arg) {
   auto foundDamageType = DamageType::UNKNOWN;
 
-  if (arg == "normal") {
-    foundDamageType = DamageType::NORMAL;
-  }
-  else if(arg == "fire") {
-    foundDamageType = DamageType::FIRE;
+  if (NAME_DMG_MAP.count(arg)) {
+    foundDamageType = NAME_DMG_MAP.at(arg);
   }
 
   assert(foundDamageType != DamageType::UNKNOWN);
@@ -100,7 +120,7 @@ pair<string, string> separateSourceAndTarget(const string& str) {
   return pair<string, string>(trim(firstPart), trim(secondPart));
 }
 
-vector<string> splitTarget(const string& raw, vector<string> acc, int start=0) {
+vector<string> splitTarget(const string& raw, vector<string>& acc, int start=0) {
   if (start >= raw.length()) {
     return acc;
   }
@@ -147,28 +167,21 @@ vector<pair<DamageType, vector<DamageType>>> parseInput(string fileName, DamageT
 }
 
 int main(const int argc, char **argv) {
-
-  if (2 != argc) {
-    cout
-      << "Usage: pokecalc <input file>"
-      << endl;
-    return 1;
-  }
-
   DamageType sourceDamage;
   vector<DamageType> targetDamage;
 
   vector<pair<DamageType, vector<DamageType>>> data = parseInput(argv[1], sourceDamage, targetDamage);
   for(auto item : data) {
     double multiplier = 1.0;
-    for_each(item.second.begin(), item.second.end(), [&item](DamageType dmg) {
+    for_each(item.second.begin(), item.second.end(), [&item, &multiplier](DamageType dmg) {
       double newMultiplier = 1.0;
       auto key = DamagePair(item.first, dmg);
       if (DMG_PAIR_MAP.count(key) > 0) {
-        newMultiplier *= DMG_PAIR_MAP.at(key);
+        newMultiplier = DMG_PAIR_MAP.at(key);
       }
+      multiplier *= newMultiplier;
     });
-    cout << multiplier << endl;
+    cout << multiplier << "x" << endl;
   }
   return 0;
 }
