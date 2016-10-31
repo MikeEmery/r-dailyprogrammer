@@ -32,12 +32,16 @@ public:
     Edge(const Stop& from, const Stop& to, double timeTaken)
     :from(from), to(to), timeTaken(timeTaken) {}
     
+    Edge swap() const{
+        return Edge(to, from, timeTaken);
+    }
+    
     string toString() const {
         stringstream buffer;
         buffer << pairToString(this->from) << " -> " << pairToString(this->to) << " = " << this->timeTaken;
         return move(buffer.str());
     }
-
+    
     bool operator<(const Edge& other) const {
         return this->toString().compare(other.toString()) < 0;
     }
@@ -126,6 +130,7 @@ public:
         q.push(e->to);
         visited.insert(*e);
         edgeTo.insert(EdgeToMap::value_type(e->to, e));
+        cout << "EdgeTo: " << edgeTo.size() << endl;
     }
     
     // usings BFS, find all paths to the destination
@@ -149,13 +154,13 @@ public:
             TransitGraph::EdgeList adj = g.adj(current);
             cout << "----------------" << pairToString(current) << "----------------" << endl;
             for(auto e : adj) {
-                cout << e->toString() << endl;
+                cout << e->toString();
                 if (visited.count(*e) == 0) {
-                    cout << ", processed" << endl;
+                    cout << ", Processed" << endl;
                     process(e, q, edgeTo, visited);
                 }
                 else {
-                    cout << ", skipped" << endl;
+                    cout << ", Skipped" << endl;
                 }
             }
         }
@@ -169,46 +174,40 @@ private:
         vector<vector<Edge>> result;
         
         auto entryPoints = g.getEntryPoints(dest);
+        set<Edge> visited;
         
-        vector<Edge> acc;
         for(auto it : *entryPoints) {
-            solutionBfs(edgeTo, it, maxLineSwitches, acc);
+            solutionDfs(edgeTo, it, it, maxLineSwitches, visited, move(vector<Edge>()));
         }
         
         return vector<StationPath>();
     }
     
     void printAcc(const Stop& node, const vector<Edge>& acc) {
-        cout << "Node " << pairToString(node) << ": ";
+        cout << "Node " << pairToString(node) << ": " << endl;
         for_each(acc.begin(), acc.end(), [](auto e) {
-            cout << e.toString() << ", ";
+            cout << "\t" << e.swap().toString() << endl;
         });
         cout << endl;
     }
     
-    void solutionBfs(const EdgeToMap& edgeTo, const Stop& node, int maxLineSwitches, vector<Edge> acc) {
-        set<string> visited;
-        queue<Edge> q;
-        
+    void solutionDfs(const EdgeToMap& edgeTo, const Stop& goal, const Stop& node, int maxLineSwitches, set<Edge>& visited, vector<Edge> acc) {
         auto range = edgeTo.equal_range(node);
+        
+        int count = 0;
+        
         for (auto it = range.first; it != range.second; ++it) {
-            q.push(*it->second);
-            visited.insert(it->second->toString());
+            shared_ptr<Edge> current = it->second;
+            if (visited.count(*current) == 0) {
+                count++;
+                visited.insert(*current);
+                acc.push_back(*current);
+                solutionDfs(edgeTo, goal, current->from, maxLineSwitches, visited, acc);
+            }
         }
         
-        while(!q.empty()) {
-            Edge current = q.front();
-            q.pop();
-            
-            cout << current.toString() << endl;
-            
-            auto range = edgeTo.equal_range(current.from);
-            for (auto it = range.first; it != range.second; ++it) {
-                if (visited.count(current.toString()) == 0) {
-                    q.push(*it->second);
-                    visited.insert(it->second->toString());
-                }
-            }
+        if (count == 0) {
+            printAcc(goal, acc);
         }
     }
 };
