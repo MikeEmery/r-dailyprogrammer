@@ -47,6 +47,26 @@ public:
     }
 };
 
+class EdgeTracker {
+    set<size_t> edges;
+    const hash<string> hashFn;
+public:
+    EdgeTracker(): edges(move(set<size_t>())), hashFn(hash<string>{}) {}
+    void store(const Edge& edge) {
+        string edge1 = edge.toString();
+        string edge2 = edge.swap().toString();
+        
+        const size_t hash1 = hashFn(edge1);
+        const size_t hash2 = hashFn(edge2);
+        edges.insert(hash1);
+        edges.insert(hash2);
+    }
+    bool includes(const Edge& edge) {
+        const size_t hash = hashFn(edge.toString());
+        return (edges.count(hash) > 0);
+    }
+};
+
 class TransitGraph {
 private:
     typedef multimap<Stop, shared_ptr<Edge>> EdgeMap;
@@ -126,9 +146,9 @@ class BFS {
 public:
     BFS(const TransitGraph& g, const Station& start): g(g), start(start) {}
     
-    void process(shared_ptr<Edge> e, queue<Stop>& q, EdgeToMap& edgeTo, set<Edge>& visited) {
+    void process(shared_ptr<Edge> e, queue<Stop>& q, EdgeToMap& edgeTo, EdgeTracker& visited) {
         q.push(e->to);
-        visited.insert(*e);
+        visited.store(*e);
         edgeTo.insert(EdgeToMap::value_type(e->to, e));
         cout << "EdgeTo: " << edgeTo.size() << endl;
     }
@@ -136,7 +156,7 @@ public:
     // usings BFS, find all paths to the destination
     vector<StationPath> pathsTo(const Station& dest, int maxLineSwitches) {
         EdgeToMap edgeTo;
-        set<Edge> visited;
+        EdgeTracker visited;
         queue<Stop> q;
         
         TransitGraph::EdgeList adj = g.adj(start);
@@ -155,7 +175,7 @@ public:
             cout << "----------------" << pairToString(current) << "----------------" << endl;
             for(auto e : adj) {
                 cout << e->toString();
-                if (visited.count(*e) == 0) {
+                if (!visited.includes(*e)) {
                     cout << ", Processed" << endl;
                     process(e, q, edgeTo, visited);
                 }
@@ -174,7 +194,7 @@ private:
         vector<vector<Edge>> result;
         
         auto entryPoints = g.getEntryPoints(dest);
-        set<Edge> visited;
+        EdgeTracker visited;
         
         for(auto it : *entryPoints) {
             solutionDfs(edgeTo, it, it, maxLineSwitches, visited, move(vector<Edge>()));
@@ -191,16 +211,16 @@ private:
         cout << endl;
     }
     
-    void solutionDfs(const EdgeToMap& edgeTo, const Stop& goal, const Stop& node, int maxLineSwitches, set<Edge>& visited, vector<Edge> acc) {
+    void solutionDfs(const EdgeToMap& edgeTo, const Stop& goal, const Stop& node, int maxLineSwitches, EdgeTracker& visited, vector<Edge> acc) {
         auto range = edgeTo.equal_range(node);
         
         int count = 0;
         
         for (auto it = range.first; it != range.second; ++it) {
             shared_ptr<Edge> current = it->second;
-            if (visited.count(*current) == 0) {
+            if (!visited.includes(*current)) {
                 count++;
-                visited.insert(*current);
+                visited.store(*current);
                 acc.push_back(*current);
                 solutionDfs(edgeTo, goal, current->from, maxLineSwitches, visited, acc);
             }
