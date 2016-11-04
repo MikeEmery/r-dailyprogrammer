@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9FE5ABD21DCC10E8009C5A9C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FE5ABD11DCC10E8009C5A9C /* main.cpp */; };
+		9FE5ABD91DCC2E81009C5A9C /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9FE5ABD81DCC2E81009C5A9C /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		9FE5ABCE1DCC10E8009C5A9C /* kaprekar-numbers */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "kaprekar-numbers"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FE5ABD11DCC10E8009C5A9C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9FE5ABD81DCC2E81009C5A9C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				9FE5ABD11DCC10E8009C5A9C /* main.cpp */,
+				9FE5ABD81DCC2E81009C5A9C /* README.md */,
 			);
 			path = "kaprekar-numbers";
 			sourceTree = "<group>";
@@ -120,6 +123,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FE5ABD91DCC2E81009C5A9C /* README.md in Sources */,
 				9FE5ABD21DCC10E8009C5A9C /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
