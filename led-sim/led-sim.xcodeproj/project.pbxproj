@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9FE5ABE71DCCFE82009C5A9C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FE5ABE61DCCFE82009C5A9C /* main.cpp */; };
+		9FE5ABEE1DCCFF67009C5A9C /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 9FE5ABED1DCCFF67009C5A9C /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -23,8 +24,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9F9833CA1DD016D300509BD4 /* input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = input.txt; sourceTree = "<group>"; };
 		9FE5ABE31DCCFE82009C5A9C /* led-sim */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "led-sim"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FE5ABE61DCCFE82009C5A9C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9FE5ABED1DCCFF67009C5A9C /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +60,9 @@
 		9FE5ABE51DCCFE82009C5A9C /* led-sim */ = {
 			isa = PBXGroup;
 			children = (
+				9FE5ABED1DCCFF67009C5A9C /* README.md */,
 				9FE5ABE61DCCFE82009C5A9C /* main.cpp */,
+				9F9833CA1DD016D300509BD4 /* input.txt */,
 			);
 			path = "led-sim";
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9FE5ABEE1DCCFF67009C5A9C /* README.md in Sources */,
 				9FE5ABE71DCCFE82009C5A9C /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -249,6 +255,7 @@
 				9FE5ABEC1DCCFE82009C5A9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
